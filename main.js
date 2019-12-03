@@ -78,7 +78,7 @@ function loadMap(geoJSON) {
   function popup(feature, layer) {
     var properties = feature.properties;
     var popupContent = '';
-    var columnsToShow = ['Nome da Propriedade', 'Endereço', 'Instituição', 'Tipo de uso', 'Número de unidades habitacionais', 'Latitude', 'Longitude']
+    var columnsToShow = ['Nome da Propriedade', 'Endereço', 'Instituição', 'Tipo de uso', 'Número de unidades habitacionais']
 
     for (var variable in properties) {
       if (properties.hasOwnProperty(variable) && columnsToShow.includes(variable)) {
