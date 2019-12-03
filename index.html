@@ -7,6 +7,7 @@
   <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+  <script src="main.js" charset="utf-8"></script>
   <style>
     html,
     body {
@@ -16,104 +17,13 @@
 
     #map {
       width: 100%;
-      height: 900px;
+      height: 100vh;
     }
   </style>
 </head>
 
 <body>
   <div id='map'></div>
-
-  <script type='text/javascript'>
-    // var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSDzRy-wix-8xCNbBhBkj-vSHqhgYRILXqqp3baW6fvOr6vphB0Bc9QCOopj16UWqlp5-fAEc5r8Q1y/pubhtml';
-    var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1UH8u5zl_qtsEwLzIuayDG2JxEmyW48TsxE3htUMcDz4/edit?usp=sharing';
-
-    function init() {
-      console.log('starting');
-      Tabletop.init({
-        key: publicSpreadsheetUrl,
-        callback: showInfo,
-        simpleSheet: true
-      })
-    }
-
-    function showInfo(data, tabletop) {
-      console.log(data);
-      geoJSON = buildGeoJSON(data);
-      console.log(JSON.stringify(geoJSON));
-      loadMap(geoJSON);
-    }
-
-    function buildFeature(feature) {
-      var featureObject = {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": []
-        }
-      };
-      for (var variable in feature) {
-        if (feature.hasOwnProperty(variable)) {
-          featureObject['properties'][variable] = feature[variable]
-        }
-      };
-      featureObject['geometry']['coordinates'].push(parseFloat(feature['latitude']))
-      featureObject['geometry']['coordinates'].push(parseFloat(feature['longitude']))
-      return featureObject;
-    }
-
-    function buildGeoJSON(data) {
-      var featureCollection = {
-        "type": "FeatureCollection",
-        "features": []
-      }
-      for (var i = 0; i < data.length; i++) {
-        feature = data[i];
-        if (feature['longitude'] !== '' && feature['latitude'] !== '') {
-          var built = buildFeature(feature);
-          featureCollection['features'].push(built);
-        }
-      }
-      return featureCollection;
-    }
-
-    function loadMap(geoJSON) {
-      var map = L.map('map').setView([0, 0], 2);
-
-      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-        maxZoom: 18,
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-          '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox.light'
-      }).addTo(map);
-
-      function onEachFeature(feature, layer) {
-        var properties = feature.properties;
-        var popupContent = '';
-        for (var variable in properties) {
-          if (properties.hasOwnProperty(variable)) {
-            popupContent += '<strong>' + variable + '</strong>: ' + properties[variable] + '</br>'
-          }
-        }
-    		layer.bindPopup(popupContent);
-    	}
-
-      var pointsLayers = L.geoJSON(geoJSON, {
-        pointToLayer: function(feature, latlng) {
-          return L.marker(latlng, {
-          });
-        },
-        onEachFeature: onEachFeature
-      }).addTo(map);
-
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-      init();
-    });
-  </script>
 </body>
 
 </html>
