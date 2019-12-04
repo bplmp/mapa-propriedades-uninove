@@ -5,15 +5,16 @@ function init() {
   Tabletop.init({
     key: publicSpreadsheetUrl,
     callback: showInfo,
-    simpleSheet: true
+    simpleSheet: false
   })
 }
 
 function showInfo(data, tabletop) {
-  console.log(data);
-  geoJSON = buildGeoJSON(data);
+  var dataSheet = data.data.elements
+  console.log(dataSheet);
+  geoJSON = buildGeoJSON(dataSheet);
   console.log(JSON.stringify(geoJSON));
-  console.log(data.length, 'rows received');
+  console.log(dataSheet.length, 'rows received');
   console.log(geoJSON.features.length, 'rows parsed');
   loadMap(geoJSON);
 }
