@@ -67,7 +67,7 @@ function buildGeoJSON(data) {
 function loadMap(geoJSON) {
   var map = L.map('map').setView([0, 0], 2);
 
-  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+  L.tileLayer('https://api.mapbox.com/styles/v1/bernardosp/ck3r9ne5k21bj1dpdgl67vzyu/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYmVybmFyZG9zcCIsImEiOiJjamkyMmhqdjAwZ284M2txcHpqYjUwam91In0.RiploEl5Mm6bjXhPZbN6XQ', {
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
       '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -76,15 +76,29 @@ function loadMap(geoJSON) {
   }).addTo(map);
 
   function popup(feature, layer) {
-    var properties = feature.properties;
-    var popupContent = '';
-    var columnsToShow = ['Nome da Propriedade', 'Endereço', 'Instituição', 'Tipo de uso', 'Número de unidades habitacionais']
+    var prop = feature.properties;
+    var propertyName = 'Nome da Propriedade';
+    var address = 'Endereço';
+    var city = 'Município';
+    var country = 'País';
+    var institution = 'Instituição';
+    var useType = 'Tipo de uso';
+    var numberOfUnits = 'Número de unidades habitacionais';
 
-    for (var variable in properties) {
-      if (properties.hasOwnProperty(variable) && columnsToShow.includes(variable)) {
-        popupContent += '<strong>' + variable + '</strong>: ' + properties[variable] + '</br>'
-      }
+    function generateLine(prop, propKey) {
+      return (prop[propKey] ? `<strong>${propKey}</strong>: ${prop[propKey]}</br>` : '')
     }
+
+    var popupContent = `
+      ${generateLine(prop, propertyName)}
+      ${generateLine(prop, address)}
+      ${generateLine(prop, city)}
+      ${generateLine(prop, country)}
+      ${generateLine(prop, institution)}
+      ${generateLine(prop, useType)}
+      ${generateLine(prop, numberOfUnits)}
+    `
+
     layer.bindPopup(popupContent);
   }
 
