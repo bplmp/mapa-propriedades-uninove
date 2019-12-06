@@ -95,6 +95,7 @@ function loadMap(geoJSON) {
 
     var popupContent = `
       ${generateLine(prop, propertyName)}
+      ${generateLine(prop, institution)}
       ${generateLine(prop, address)}
       ${generateLine(prop, stateProvince)}
       ${generateLine(prop, city)}
