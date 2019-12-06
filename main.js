@@ -78,29 +78,31 @@ function loadMap(geoJSON) {
 
   function popup(feature, layer) {
     var prop = feature.properties;
-    var propertyName = 'Nome da Propriedade';
-    var address = 'Endereço';
-    var city = 'Município';
-    var country = 'País';
-    var institution = 'Instituição';
-    var useType = 'Tipo de uso';
-    var numberOfUnits = 'Número de unidades habitacionais';
+    var propertyName = 'Property Name';
+    var address = 'Address';
+    var stateProvince = 'State/Province';
+    var city = 'City';
+    var country = 'Country';
+    var institution = 'Institution';
+    var link = 'Link';
 
     function generateLine(prop, propKey) {
-      return (prop[propKey] ? `<strong>${propKey}</strong>: ${prop[propKey]}</br>` : '')
+      return (prop[propKey] ? `<tr><td><strong>${propKey}</strong></td><td>${prop[propKey]}</td></tr>` : '')
+    }
+    function generateLink(prop, propKey, linkText) {
+      return (prop[propKey] ? `<tr><td colspan="2"><strong><a href="${prop[propKey]}" target="_blank">${linkText}</a></strong></td></tr>` : '')
     }
 
     var popupContent = `
       ${generateLine(prop, propertyName)}
       ${generateLine(prop, address)}
+      ${generateLine(prop, stateProvince)}
       ${generateLine(prop, city)}
       ${generateLine(prop, country)}
-      ${generateLine(prop, institution)}
-      ${generateLine(prop, useType)}
-      ${generateLine(prop, numberOfUnits)}
+      ${generateLink(prop, link, 'Link to property website')}
     `
 
-    layer.bindPopup(popupContent);
+    layer.bindPopup('<table class="table table-sm"><tbody>' + popupContent + '</tbody></table>');
   }
 
   var pointsLayers = L.geoJSON(geoJSON, {
