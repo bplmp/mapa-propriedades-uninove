@@ -85,9 +85,14 @@ function loadMap(geoJSON) {
     var country = 'Country';
     var institution = 'Institution';
     var link = 'Link';
+    var use = 'Use';
+    var numberOfHousingUnits = 'Number of Housing Units';
 
     function generateLine(prop, propKey) {
       return (prop[propKey] ? `<tr><td><strong>${propKey}</strong></td><td>${prop[propKey]}</td></tr>` : '')
+    }
+    function generateNumberOfUnitsLine(prop, useKey, unitsKey) {
+      return (prop[unitsKey] && prop[useKey] && prop[useKey].match(/residencial|housing/gi) ? `<tr><td><strong>${unitsKey}</strong></td><td>${prop[unitsKey]}</td></tr>` : '')
     }
     function generateLink(prop, propKey, linkText) {
       return (prop[propKey] ? `<tr><td colspan="2"><strong><a href="${prop[propKey]}" target="_blank">${linkText}</a></strong></td></tr>` : '')
@@ -100,6 +105,8 @@ function loadMap(geoJSON) {
       ${generateLine(prop, stateProvince)}
       ${generateLine(prop, city)}
       ${generateLine(prop, country)}
+      ${generateLine(prop, use)}
+      ${generateNumberOfUnitsLine(prop, use, numberOfHousingUnits)}
       ${generateLink(prop, link, 'Link to property website')}
     `
 
