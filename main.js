@@ -17,6 +17,9 @@ function showInfo(data, tabletop) {
   console.log(dataSheet.length, 'rows received');
   console.log(geoJSON.features.length, 'rows parsed');
   loadMap(geoJSON);
+  setTimeout(function(){
+    document.getElementById('spinner').style.display = 'none';
+  }, 350);
 }
 
 function buildFeature(feature) {
