@@ -1,16 +1,21 @@
-var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1UH8u5zl_qtsEwLzIuayDG2JxEmyW48TsxE3htUMcDz4/edit?usp=sharing';
+var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSDzRy-wix-8xCNbBhBkj-vSHqhgYRILXqqp3baW6fvOr6vphB0Bc9QCOopj16UWqlp5-fAEc5r8Q1y/pub?output=csv';
 
 function init() {
   console.log('starting');
-  Tabletop.init({
-    key: publicSpreadsheetUrl,
-    callback: showInfo,
-    simpleSheet: false
+
+  Papa.parse(publicSpreadsheetUrl, {
+    download: true,
+    header: true,
+    complete: function(results) {
+      var data = results.data;
+      console.log(data);
+      showInfo(data);
+    }
   })
 }
 
-function showInfo(data, tabletop) {
-  var dataSheet = data.data.elements
+function showInfo(data) {
+  var dataSheet = data
   console.log(dataSheet);
   geoJSON = buildGeoJSON(dataSheet);
   console.log(JSON.stringify(geoJSON));
